@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Photo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .upload-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 0 10px;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        video, img {
+            width: 80%;
+            max-height: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #2ecc71;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 80%;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #27ae60;
+        }
+        .submit-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .submit-button {
+            background-color: #3498db;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .submit-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Food Photo Upload </h1>
+
+    <div class="container">
+        <!-- Section 1 -->
+        <div class="upload-section">
+            <h2>Before Eating</h2>
+            <video id="video1" autoplay playsinline></video>
+            <img id="capturedPhoto1" style="display:none;" alt="Captured Photo 1">
+            <button id="startCamera1">Start Camera</button>
+            <button id="capturePhoto1" disabled>Capture Photo</button>
+        </div>
+
+        <!-- Section 2 -->
+        <div class="upload-section">
+            <h2>After Eating</h2>
+            <video id="video2" autoplay playsinline></video>
+            <img id="capturedPhoto2" style="display:none;" alt="Captured Photo 2">
+            <button id="startCamera2">Start Camera</button>
+            <button id="capturePhoto2" disabled>Capture Photo</button>
+        </div>
+    </div>
+
+    <div class="submit-section">
+        <button class="submit-button"><a href="cashback.html">Submit</a></button>
+    </div>
+
+    <script>
+        let firstPhotoSaved = false;  // Flag to track if first photo is saved
+
+        // Function to initialize camera functionality for each section
+        function setupCamera(sectionId) {
+            const videoElement = document.getElementById(`video${sectionId}`);
+            const capturedPhoto = document.getElementById(`capturedPhoto${sectionId}`);
+            const startButton = document.getElementById(`startCamera${sectionId}`);
+            const captureButton = document.getElementById(`capturePhoto${sectionId}`);
+            let videoStream;
+
+            // Start the camera
+            startButton.addEventListener('click', async () => {
+                try {
+                    videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    videoElement.srcObject = videoStream;
+                    videoElement.style.display = 'block';
+                    capturedPhoto.style.display = 'none';
+                    captureButton.disabled = false;
+                    startButton.disabled = true;
+                } catch (error) {
+                    alert('Unable to access the camera: ' + error.message);
+                    console.error(error);
+                }
+            });
+
+            // Capture a photo and upload to server
+            captureButton.addEventListener('click', async () => {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.width = videoElement.videoWidth;
+                canvas.height = videoElement.videoHeight;
+                context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+                // Convert canvas to base64 data URL
+                const photoData = canvas.toDataURL('image/png');
+                
+                capturedPhoto.src = photoData;
+                capturedPhoto.style.display = 'block';
+                videoElement.style.display = 'none';
+
+                // Stop the video stream
+                const tracks = videoStream.getTracks();
+                tracks.forEach(track => track.stop());
+                videoElement.srcObject = null;
+
+                // Save the photo only if it is the first photo and hasn't been saved yet
+                if (sectionId === 1 && !firstPhotoSaved) {
+                    firstPhotoSaved = true;
+
+                    try {
+                        const response = await fetch('/upload', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ image: photoData })
+                        });
+
+                        if (response.ok) {
+                            alert('Photo saved successfully!');
+                        } else {
+                            alert('Failed to save photo.');
+                        }
+                    } catch (error) {
+                        console.error('Error uploading photo:', error);
+                    }
+                } else if (sectionId === 1) {
+                    alert('First photo has already been saved.');
+                }
+
+                captureButton.disabled = true;
+                startButton.disabled = false;
+            });
+        }
+
+        // Initialize camera for both sections
+        setupCamera(1); // Section 1
+        setupCamera(2); // Section 2
+        document.getElementById("submitForm").addEventListener("click", () => {
+            // Redirect to the cashback page after submit
+            window.location.href = "cashback.html";
+        });
+    </script>
+
+</body>
+</html>

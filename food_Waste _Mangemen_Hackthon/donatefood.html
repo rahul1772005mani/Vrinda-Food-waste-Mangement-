@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate Food</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('img/360_F_319405443_lnH13ovYQLkC4ELcX9awjrkDAuZBiRPK.jpg') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: rgba(154, 227, 240, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        p {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #666;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 15px; /* Rounded edges */
+            font-size: 16px;
+            outline: none;
+            margin: 10px 0; /* Added margin around text boxes */
+            transition: box-shadow 0.3s, border-color 0.3s; /* Smooth focus transition */
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: #2ecc71;
+            box-shadow: 0 0 8px rgba(46, 204, 113, 0.8); /* Glow effect */
+        }
+
+        button {
+    background-color: #2ecc71; /* Primary color */
+    color: white;
+    padding: 10px 40px; /* Reduced padding for a smaller button */
+    font-size: 14px; /* Smaller text size */
+    border: none;
+    border-radius: 50px; /* Fully rounded edges */
+    cursor: pointer;
+    transition: all 0.3s ease-in-out; /* Smooth hover animation */
+    text-transform: uppercase; /* Capitalized text */
+    width: 150px; /* Fixed width to keep the button size consistent */
+    align-self: center; /* Center the button */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+button:hover {
+    background-color: #27ae60; /* Slightly darker green */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+    transform: scale(1.05); /* Slight size increase on hover */
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><b>Donate Food</b></h1>
+        <p><b>Fill out the form below to donate food and help those in need.</b></p>
+
+        <form action="/submit-donation" method="POST">
+            <!-- Donor Name -->
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+
+            <!-- Contact Information -->
+            <label for="contact">Contact Number</label>
+            <input type="text" id="contact" name="contact" placeholder="Enter your contact number" required>
+
+            <!-- Food Type -->
+            <label for="foodType">Type of Food</label>
+            <select id="foodType" name="foodType" required>
+                <option value="Dry Food">Dry Food</option>
+                <option value="Cooked Food">Cooked Food</option>
+                <option value="Canned Food">Canned Food</option>
+            </select>
+
+            <!-- Quantity -->
+            <label for="quantity">Quantity (in kilograms)</label>
+            <input type="number" id="quantity" name="quantity" placeholder="Enter quantity in kg" required>
+
+            <!-- Message -->
+            <label for="message">Additional Message</label>
+            <textarea id="message" name="message" rows="2" placeholder="Leave a message or special instructions"></textarea>
+
+            <!-- Submit Button -->
+            <button type="submit" onclick="location.href='thku.html'"><b>Submit Donation</b></button>
+        </form>
+    </div>
+</body>
+</html>

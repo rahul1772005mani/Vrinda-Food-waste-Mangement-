@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Analytics</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #06C167;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .chart {
+            width: 45%;
+            margin: 20px;
+            text-align: center;
+        }
+
+        canvas {
+            max-width: 100%;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Food Analytics</h1>
+    </header>
+    <div class="container">
+        <h2>Data Insights</h2>
+        <p>
+            This page provides a detailed analysis of food waste trends in the past month and compares the current day's data with the previous day.
+        </p>
+
+        <div class="chart-container">
+            <!-- Last Month Daily Food Waste Chart -->
+            <div class="chart">
+                <h3>Last Month's Daily Food Waste (kg)</h3>
+                <canvas id="lastMonthChart"></canvas>
+            </div>
+
+            <!-- Current vs Previous Day Analysis -->
+            <div class="chart">
+                <h3>Current Day vs Previous Day Food Waste (kg)</h3>
+                <canvas id="currentVsPreviousChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <!-- Food Waste by Particular Items -->
+            <div class="chart">
+                <h3>Food Waste by Items (kg)</h3>
+                <canvas id="itemWasteChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2023 Food Waste Management. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Last Month Daily Food Waste Chart Data
+        const lastMonthCtx = document.getElementById('lastMonthChart').getContext('2d');
+        const lastMonthChart = new Chart(lastMonthCtx, {
+            type: 'bar',
+            data: {
+                labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30'],
+                datasets: [{
+                    label: 'Food Waste (kg)',
+                    data: [120, 100, 95, 110, 105, 115, 130, 140, 120, 100, 90, 85, 125, 130, 110, 115, 120, 95, 100, 110, 105, 115, 130, 120, 100, 95, 90, 85, 125, 130],
+                    backgroundColor: '#3498db',
+                    borderColor: '#2980b9',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Days of the Month'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Food Waste (kg)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Current vs Previous Day Analysis Chart Data
+        const currentVsPreviousCtx = document.getElementById('currentVsPreviousChart').getContext('2d');
+        const currentVsPreviousChart = new Chart(currentVsPreviousCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Previous Day', 'Current Day'],
+                datasets: [{
+                    label: 'Food Waste (kg)',
+                    data: [100, 120],
+                    backgroundColor: ['#2ecc71', '#e74c3c'],
+                    borderColor: ['#27ae60', '#c0392b'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true
+                    }
+                },
+                scales: {
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Food Waste (kg)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Food Waste by Particular Items Chart Data
+        const itemWasteCtx = document.getElementById('itemWasteChart').getContext('2d');
+        const itemWasteChart = new Chart(itemWasteCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Rice', 'Bread', 'Vegetables', 'Meat', 'Desserts'],
+                datasets: [{
+                    label: 'Food Waste by Items (kg)',
+                    data: [50, 30, 40, 60, 20],
+                    backgroundColor: ['#3498db', '#2ecc71', '#e74c3c', '#9b59b6', '#f1c40f'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
